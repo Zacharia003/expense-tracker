@@ -18,22 +18,24 @@ public class UserService {
 	public String registerUser(User user) {
 		System.out.println("-> in Service....");
 		
-		if(userRepository.existsByUsername(user.getUsername())) {
-			return "Username already exist";
+		try {
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
+			userRepository.save(user);
+			return "User Registered Succussfully!";
+		} catch (Exception e) {
+			return e.getMessage();
 		}
-		
-		if(userRepository.existsByEmailId(user.getEmailId())) {
-			return "Email ID already exist";
-		}
-		
-		if(userRepository.existsByMobileNumber(user.getMobileNumber())) {
-			return "Mobile Number already exist";
-		}
-		
-		//Hash the password for security
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		userRepository.save(user);
-		
-		return "User Registered Succussfully!";
+	}
+	
+	public boolean isEmailUnique(String email) {
+		return !userRepository.existsByEmailId(email);
+	}
+	
+	public boolean isUsernameExist(String username) {
+		return !userRepository.existsByUsername(username);
+	}
+	
+	public boolean isMobileNumberExist(String mobileNumber){
+		return !userRepository.existsByMobileNumber(mobileNumber);
 	}
 }

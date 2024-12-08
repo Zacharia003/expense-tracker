@@ -36,4 +36,13 @@ public class User {
 	
 	@Column(name = "date_of_registeration", nullable = false, updatable = false)
 	private LocalDateTime dateOfRegisteration = LocalDateTime.now();
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", fullName=" + fullName + ", username=" + username + ", emailId=" + emailId
+				+ ", mobileNumber=" + mobileNumber + ", password=" + password + ", dateOfRegisteration="
+				+ dateOfRegisteration + "]";
+	}
+	
+	
 }
