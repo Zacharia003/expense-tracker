@@ -1,8 +1,13 @@
 import React from "react";
-import RegisterForm from "./components/RegisterForm";
+// import RegisterForm from "./pages/RegisterForm";
+import AppRoutes from "./router/Routes";
 
 function App() {
-  return <RegisterForm />;
+  return (
+    <div className="App">
+      <AppRoutes />
+    </div>
+  );
 }
 
 export default App;

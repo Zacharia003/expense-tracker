@@ -9,6 +9,7 @@ import {
 import validateEmail from "../utils/validateEmail";
 import debounceInput from "../utils/debounceInput";
 import validateMobileNumber from "../utils/validateMobileNumber";
+import { Link } from "react-router-dom";
 
 const RegisterForm = () => {
   //for username
@@ -223,6 +224,12 @@ const RegisterForm = () => {
         >
           Create Account
         </Button>
+        <p>
+          Already have account?
+          <Link to="/login" align="center">
+            Login
+          </Link>
+        </p>
       </Box>
     </Box>
   );
