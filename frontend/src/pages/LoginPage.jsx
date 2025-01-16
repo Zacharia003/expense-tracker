@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { TextField, Box, Typography, Button } from "@mui/material";
-
+import { LoginUser } from "../api/userApi";
 import { Link } from "react-router-dom";
 import "../styles/LandgingPage.css";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../router/AuthContext";
+
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const { setIsAuthenticated } = useContext(AuthContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,8 +23,25 @@ const LoginPage = () => {
     }
   };
 
+  //Handle Login API
   const handleSubmit = async (e) => {
-    console.log("username", username, "password", password);
+    // console.log("username", username, "password", password);
+    e.preventDefault();
+    try {
+      console.log("username", username);
+      const isLoggedIn = await LoginUser(username, password);
+      console.log("Login successful:", isLoggedIn);
+
+      if (isLoggedIn) {
+        setIsAuthenticated(true); // Update authentication state
+        navigate("/dashboard");
+      } else {
+        throw new Error("Invalid login response");
+      }
+    } catch (err) {
+      console.error("Login error:", err.message);
+      setError(err.message);
+    }
   };
 
   return (
@@ -46,7 +69,7 @@ const LoginPage = () => {
 
         <TextField
           required
-          label="Username / Email ID / Mobile Number"
+          label="Username"
           name="username"
           value={username}
           onChange={handleChange}
@@ -56,8 +79,9 @@ const LoginPage = () => {
 
         <TextField
           required
-          label="Enter password"
+          label="Password"
           name="password"
+          type="password"
           value={password}
           onChange={handleChange}
           fullWidth
@@ -76,9 +100,12 @@ const LoginPage = () => {
         >
           Login
         </Button>
-
-        <p>
-          Don't have an account? <Link to="/signup">Signup</Link>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        <p style={{ textAlign: "center" }}>
+          Don't have an account?
+          <Link to="/signup" style={{ marginLeft: "6px" }}>
+            Signup
+          </Link>
         </p>
       </Box>
     </Box>

@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "./Header";
 
-const LangingPage = () => {
+const LandingPage = () => {
   return (
     <div className="landing-container">
       <Header />
@@ -17,4 +17,4 @@ const LangingPage = () => {
   );
 };
 
-export default LangingPage;
+export default LandingPage;

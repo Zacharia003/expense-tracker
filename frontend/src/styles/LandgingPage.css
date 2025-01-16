@@ -9,13 +9,28 @@
 .header .logo {
   font-size: 1.5rem;
   font-weight: bold;
+  text-decoration: none;
+  /* Remove underline from link */
+  color: inherit;
+  /* Inherit text color to match surrounding text */
+  cursor: pointer;
+  /* Ensure it has the pointer cursor */
 }
 
 .header .nav-btn {
   margin-left: 1rem;
   text-decoration: none;
-  color: white;
+  color: black;
   font-weight: bold;
+  background-color: aliceblue;
+}
+
+.header .logout-btn {
+  margin-left: 1rem;
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  background-color: rgba(248, 61, 61, 0.99);
 }
 
 .landing-container main {

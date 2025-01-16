@@ -1,4 +1,9 @@
 import axios from "axios";
+import {
+  saveToIndexedDB,
+  getToken,
+  clearUserData,
+} from "../utils/StoreUserDetails";
 
 // Base URL configuration for the API
 const apiClient = axios.create({
@@ -6,6 +11,7 @@ const apiClient = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true, // Required for cookies or credentials
 });
 
 //function to check username uniquness
@@ -73,10 +79,77 @@ export const registerUser = async (user) => {
   }
 };
 
+// Login function using the configured apiClient
+export const LoginUser = async (identifier, password) => {
+  try {
+    const response = await apiClient.post("/login", {
+      identifier,
+      password,
+    });
+
+    // If login is successful, save the token to localStorage
+    if (response.data && response.data.token) {
+      console.log("Login response", response);
+      // localStorage.setItem("token", response.data.token);
+      const userData = {
+        id: "user", // Use a fixed key for simplicity
+        token: response.data.token,
+        userId: response.data.userid,
+        fullName: response.data.fullName,
+        emailId: response.data.emailId,
+        mobileNumber: response.data.mobileNumber,
+      };
+      await saveToIndexedDB(userData);
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    console.log("Login API error: ", error);
+
+    // Handle error responses gracefully
+    if (error.response && error.response.data) {
+      const errorMessage =
+        error.response.data.error || // Custom error message
+        error.response.data.message || // Default error message
+        "An error occurred during login.";
+      throw new Error(errorMessage);
+    } else {
+      throw new Error("Network error. Please try again later.");
+    }
+  }
+};
+
+export const logout = async () => {
+  try {
+    const token = await getToken();
+    const response = await apiClient.post(
+      "/logout",
+      {},
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    // Remove the token from localStorage
+    // localStorage.removeItem("token");
+
+    if (response.data === "Logout successful") {
+      await clearUserData();
+      return true;
+    } else {
+      return false;
+    }
+    // Remove the token and user data from IndexedDB
+  } catch (error) {
+    console.error("Logout error:", error);
+    throw new Error("Failed to log out. Please try again.");
+  }
+};
+
 // Export other user-related API calls if needed in the future
 export default {
   checkEmailUniqueness,
   checkMobileNumer,
   checkUsernameUniqueness,
   registerUser,
+  LoginUser,
+  logout,
 };
