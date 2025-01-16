@@ -1,10 +1,13 @@
 package com.expensetracker.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.expensetracker.model.User;
+import com.expensetracker.model.Users;
 import com.expensetracker.repository.UserRepository;
 
 @Service
@@ -15,12 +18,12 @@ public class UserService {
 
 	private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-	public String registerUser(User user) {
-		System.out.println("-> in Service....");
+	public String registerUser(Users user) {
+//		System.out.println("-> in Service....");
 
 		try {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
-			User savedUser = userRepository.save(user);
+			Users savedUser = userRepository.save(user);
 
 			// Set the userFolder using the generated ID
 			savedUser.setUserFolder(savedUser.getUsername() + savedUser.getId());
@@ -44,5 +47,11 @@ public class UserService {
 
 	public boolean isMobileNumberExist(String mobileNumber) {
 		return !userRepository.existsByMobileNumber(mobileNumber);
+	}
+
+	public Users findByUser(String identifier) {
+
+		return userRepository.findByUsernameOrEmailIdOrMobileNumber(identifier, identifier, identifier)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 	}
 }

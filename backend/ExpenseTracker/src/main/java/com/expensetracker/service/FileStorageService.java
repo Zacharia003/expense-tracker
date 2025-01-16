@@ -23,4 +23,30 @@ public class FileStorageService {
 			userDir.mkdirs();
 		}
 	}
+	
+	//delete expense bucket folder from the storage
+	public void deleteExpBucketFolder(String userFolder, String expenseBucket) {
+	    String basePath = fileStorageConfig.getBasePath();
+
+	    File bucketDir = new File(basePath + userFolder + "//" + expenseBucket);
+
+	    if (bucketDir.exists()) {
+	        deleteDirectory(bucketDir);
+	    }
+	}
+
+	private void deleteDirectory(File directory) {
+	    if (directory.isDirectory()) {
+	        File[] files = directory.listFiles();
+	        if (files != null) {
+	            for (File file : files) {
+	                deleteDirectory(file);
+	            }
+	        }
+	    }
+	    directory.delete();
+	}
+
+	
+	
 }

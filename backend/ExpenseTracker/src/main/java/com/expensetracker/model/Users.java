@@ -18,7 +18,7 @@ import lombok.ToString;
 @ToString(exclude = "expenseBuckets")
 @Entity
 @Table(name = "user")
-public class User {
+public class Users {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

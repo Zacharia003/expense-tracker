@@ -30,7 +30,7 @@ public class ExpenseBucket {
 	private String bucketName;
 	
 	@Column(columnDefinition = "TEXT")
-	private String discription;
+	private String description;
 	
 	@Column
 	private String tag;
@@ -38,7 +38,7 @@ public class ExpenseBucket {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)
 	@JsonIgnore
-	private User user;
+	private Users user;
 	
 	@Column(name = "created_at", nullable = false)
 	private LocalDateTime createdAt = LocalDateTime.now();
