@@ -1,6 +1,5 @@
 # expense-tracker
 A user-friendly system to help individuals manage and track their expenses. 
-A user-friendly system to help individuals manage and track their expenses. 
 Key features include:
 Categorization: Segregate expenses into folders like "Travel Expenses," "Home Expenses," etc.
 Flexibility: Users can assign or move expenses to appropriate folders.
